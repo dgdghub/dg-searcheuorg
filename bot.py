@@ -13,3 +13,7 @@ def send_telegram_message(message):
     response = requests.post(url, data=payload)
     return response.json()
 
+if __name__ == '__main__':
+    message = "Hello, World!"
+    response = send_telegram_message(message)
+    print(response)
