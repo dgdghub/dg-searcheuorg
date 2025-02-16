@@ -5,6 +5,7 @@ import re
 from concurrent.futures import ThreadPoolExecutor
 
 from bs4 import BeautifulSoup
+
 import bot
 
 class Euorg:
@@ -154,4 +155,3 @@ if __name__ == '__main__':
     now_time = time.time()
     print(f'\n>>> 运行结束，共耗时 {now_time - start_time:.2f} 秒。所得运行结果，在当前所在目录下，请查收。\n')
     input('>>> 按任意键退出……')
-
