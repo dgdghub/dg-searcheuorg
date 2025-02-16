@@ -15,5 +15,4 @@ def send_telegram_message(message):
 
 if __name__ == '__main__':
     message = "Hello, World!"
-    response = send_telegram_message(message)
-    print(response)
+    send_telegram_message(message)
