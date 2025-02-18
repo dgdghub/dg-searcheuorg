@@ -48,7 +48,8 @@ def write_regist(path, text):
     with open(path, 'a', encoding='utf-8') as f:
         f.write(text + '\n')
 
-from gen_str_dpseek import perform
+# from gen_str_dpseek import perform
+from gen_str_dpseek2 import perform
 def main():
     example = Euorg()
 

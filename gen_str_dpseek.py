@@ -136,5 +136,4 @@ def perform():
     return new_string
 
 if __name__ == '__main__':
-    str = perform()
-    print(str)
+    print(perform())
